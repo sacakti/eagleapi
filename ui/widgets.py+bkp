@@ -1,0 +1,46 @@
+from textual.widgets import Static
+
+class HeaderWidget(Static):
+    DEFAULT_CSS = """
+    HeaderWidget{
+        height:7;
+        content-align:center middle;
+    }
+    """
+    def on_mount(self):
+        self.update(
+"""
+Trade API Tester
+Enterprise API Testing Framework
+"""
+        )
+
+class StatusWidget(Static):
+    DEFAULT_CSS = """
+    StatusWidget{
+        border:round cyan;
+        height:5;
+        padding:1;
+    }
+    """
+    def on_mount(self):
+        self.update(
+"""
+Environment : -
+Execution  : -
+Status     : Ready
+"""
+        )
+
+class FooterWidget(Static):
+    DEFAULT_CSS = """
+    FooterWidget{
+        dock:bottom;
+        height:3;
+        content-align:center middle;
+    }
+    """
+    def on_mount(self):
+        self.update(
+            "F1 Help     F5 Refresh     Ctrl+Q Quit"
+        )

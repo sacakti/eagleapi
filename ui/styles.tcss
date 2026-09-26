@@ -1,0 +1,194 @@
+/*
+-------------------------------------------------------
+ Trade API Tester v2
+ Enterprise Theme
+-------------------------------------------------------
+*/
+Screen {
+    layout: vertical;
+    background: #0f172a;
+    color: white;
+}
+/* =====================================================
+   Header
+===================================================== */
+Header {
+    dock: top;
+    height: 1;
+    background: #1e293b;
+    color: white;
+}
+Header.-tall {
+    height: 1;
+}
+/* =====================================================
+   Main Layout
+===================================================== */
+#main-layout {
+    height: 1fr;
+    width: 100%;
+    layout: horizontal;
+}
+/* =====================================================
+   Panels
+===================================================== */
+EndpointList,
+RequestList,
+Workspace {
+    border: round #3b82f6;
+    margin: 0 1;
+    padding: 0;
+}
+EndpointList {
+    width: 20%;
+    height: 100%;
+}
+RequestList {
+    width: 25%;
+    height: 100%;
+}
+Workspace {
+    width: 55%;
+}
+/* =====================================================
+   Panel Titles
+===================================================== */
+#endpoint-title,
+#request-title,
+#preview-title {
+    background: #2563eb;
+    color: white;
+    text-style: bold;
+    content-align: center middle;
+    height: 1;
+}
+/* =====================================================
+   Lists
+===================================================== */
+#endpoint-list,
+#request-list {
+    height: 1fr;
+    scrollbar-size: 1 1;
+}
+#run-all-endpoints {
+    height: 3;
+    width: 100%;
+    margin: 0;
+}
+#run-all-requests {
+    height: 3;
+    width: 100%;
+    margin: 0;
+}
+ListView {
+    background: #111827;
+}
+ListItem {
+    padding: 0 1;
+}
+ListItem.--highlight {
+    background: rgb(0,95,135);
+    color: yellow;
+	text-style: bold;
+}
+/* =====================================================
+   Workspace
+===================================================== */
+TabbedContent {
+    height: 1fr;
+}
+TabPane {
+    padding: 0;
+}
+/* =====================================================
+   Preview Editor
+===================================================== */
+#preview-editor {
+    height: 1fr;
+    border: none;
+}
+#response-editor {
+    height: 1fr;
+    border: none;
+}
+/* =====================================================
+   Execution
+===================================================== */
+#execution-log {
+    height: 1fr;
+    background: black;
+    color: white;
+}
+#report-log {
+    height: 1fr;
+    background: black;
+    color: white;
+}
+/* =====================================================
+   Footer
+===================================================== */
+StatusBar {
+    dock: bottom;
+    height: 1;
+    background: #1e293b;
+    color: white;
+    padding: 0 1;
+}
+/* =====================================================
+   Scrollbars
+===================================================== */
+Scrollbar {
+    background: #0f172a;
+}
+Scrollbar > .slider {
+    background: #2563eb;
+}
+/* =====================================================
+   Focus
+===================================================== */
+/* *:focus {
+    border: round #60a5fa;
+} */
+/* =====================================================
+   Labels
+===================================================== */
+Label {
+    color: white;
+}
+/* =====================================================
+   TextArea
+===================================================== */
+TextArea {
+    background: #111827;
+    color: white;
+}
+/* =====================================================
+   Tabs
+===================================================== */
+Tabs {
+    background: #1e293b;
+}
+Tab {
+    color: #cbd5e1;
+}
+Tab.-active {
+    background: #2563eb;
+    color: white;
+    text-style: bold;
+}
+ 
+Tabs {
+   background: $surface;
+}
+Tab {
+   background: $surface;
+   color: white;
+}
+Tab.-active {
+   background: cyan;
+   color: black;
+   text-style: bold;
+}
+Tab:hover {
+   background: rgb(40,40,40);
+}

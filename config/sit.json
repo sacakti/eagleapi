@@ -1,0 +1,8 @@
+{
+   "name" : "SIT environment",
+   "base_url": "https://api.sit.example.com",
+   "verify_ssl": true,
+   "client_certificate": "certificates/client.crt",
+   "client_key": "certificates/client.key",
+   "ca_certificate": "certificates/ca.pem"
+}

@@ -1,0 +1,25 @@
+# Core data validation
+pydantic==2.11.7
+pydantic-core==2.33.2
+
+# HTTP / API
+requests==2.32.5
+urllib3==2.6.3
+certifi==2025.8.3
+charset-normalizer==3.4.3
+idna==3.10
+
+# CLI / UI
+textual==2.1.2
+rich==14.1.0
+
+# Templates
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+
+# Parsing / configuration
+PyYAML==6.0.2
+
+# Tree-sitter / code parsing
+tree-sitter==0.23.2
+tree-sitter-python==0.23.6

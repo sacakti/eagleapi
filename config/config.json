@@ -1,0 +1,8 @@
+{
+   "applicationName": "API Testing Framework",
+   "timeout": 30,
+   "verifySsl": true,
+   "saveResponse": true,
+   "reportDirectory": "reports",
+   "logDirectory": "logs"
+}
