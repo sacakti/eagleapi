@@ -14,6 +14,7 @@ from ui.widgets.endpoint_list import EndpointList
 from ui.widgets.request_list import RequestList
 from ui.widgets.workspace import Workspace
 from ui.widgets.status import StatusBar
+from ui.widgets.new_request import NewRequestScreen
 
 class MainScreen(Screen):
     # BINDINGS = [
@@ -29,9 +30,10 @@ class MainScreen(Screen):
        ("ctrl+n", "new", "New"),
        ("ctrl+c", "copy", "Copy"),
        ("ctrl+v", "paste", "Paste"),
+       ("ctrl+s", "save", "Save"),
        ("f1", "help", "Help"),
        ("f2", "edit", "Edit"),
-       ("f5", "refresh", "Refresh"),
+       ("ctrl+r", "refresh", "Refresh"),
        ("f9", "run_all", "Run All"),
        ("escape", "quit", "Exit"),
     ]
@@ -294,3 +296,92 @@ class MainScreen(Screen):
             self.workspace.execution(
                 f"Completed {len(results)} request(s)"
             )
+    
+    def action_edit(self):
+        self.workspace.enable_edit()
+
+        self.notify(
+            "Edit mode enabled. Press Ctrl+S to save."
+        )
+
+    def action_save(self):
+        if not self.workspace.is_editing():
+            self.notify(
+                "Edit mode is not enabled."
+            )
+            return
+
+        try:
+            self.controller.save_current_request(
+                self.workspace.preview_text()
+            )
+
+            self.workspace.disable_edit()
+
+            self.workspace.refresh_preview()
+
+            self.notify(
+                "Request saved successfully."
+            )
+
+        except Exception as exc:
+            self.notify(
+                f"Save failed: {exc}",
+                severity="error"
+            )
+    def action_refresh(self):
+        self.endpoint_list.load(
+            self.controller.load_endpoints()
+        )
+
+        self.request_list.load(
+            self.controller.requests()
+        )
+
+        self.workspace.refresh_preview()
+
+        self.notify("Refreshed")
+
+    def action_new(self):
+        def handle_new_request(data):
+            if data is None:
+                return
+
+            try:
+                self.controller.create_request(
+                    name=data["name"],
+                    method=data["method"],
+                    path=data["path"],
+                )
+
+                # Reload request list
+                requests = self.controller.requests()
+
+                self.request_list.load(
+                    requests
+                )
+
+                # Select newly created request
+                for index, request_name in enumerate(requests):
+                    if request_name == data["name"]:
+                        self.request_list.request_list.highlighted = index
+                        self.controller.select_request(index)
+                        break
+
+                # Refresh preview
+                self.workspace.refresh_preview()
+
+                self.notify(
+                    f"Request '{data['name']}' created."
+                )
+
+            except Exception as exc:
+                self.notify(
+                    f"Create failed: {exc}",
+                    severity="error",
+                )
+
+        self.app.push_screen(
+            NewRequestScreen(),
+            handle_new_request,
+        )

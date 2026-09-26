@@ -17,6 +17,8 @@ from typing import List, Optional
 from framework.loader import RequestLoader
 from framework.runner import Runner
 from framework.scanner import EndpointScanner
+from framework.models import RequestDefinition
+
 class UIController:
     def __init__(self, context):
         self._context = context
@@ -154,7 +156,60 @@ class UIController:
        return self._runner.run_all(
            self._selected_endpoint.name
        )
-   
+
+    # Save 
+    def save_current_request(
+        self,
+        data
+    ):
+        if self._selected_endpoint is None:
+            return False
+
+        if self._selected_request is None:
+            return False
+
+        request = RequestDefinition.model_validate_json(
+            data
+        )
+
+        self._loader.save(
+            endpoint_name=self._selected_endpoint.name,
+            request_name=self._selected_request,
+            request=request
+        )
+
+        return True
+
+    # Create new request
+    def create_request(
+        self,
+        name: str,
+        method: str,
+        path: str,
+    ):
+        if self._selected_endpoint is None:
+            raise RuntimeError(
+                "No endpoint selected."
+            )
+
+        request = RequestDefinition(
+            name=name,
+            method=method,
+            path=path,
+        )
+
+        self._loader.create(
+            endpoint_name=self._selected_endpoint.name,
+            request=request,
+        )
+
+        # Reload requests from disk
+        self.load_requests(
+            self._selected_endpoint.name
+        )
+
+        return request
+    
     # -------------------------------------------------
     # Properties
     # -------------------------------------------------

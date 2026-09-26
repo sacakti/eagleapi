@@ -28,7 +28,8 @@ class ApiTesterApp(App):
         Binding("f5", "refresh", "Refresh"),
         Binding("f9", "run_all", "Run All"),
         Binding("ctrl+f", "search", "Search"),
-        Binding("ctrl+s", "save", "Save")
+        Binding("ctrl+s", "save", "Save"),
+        Binding("ctrl+r", "refresh", "Refresh")
     ]
     def __init__(self):
         super().__init__()
@@ -102,16 +103,6 @@ class ApiTesterApp(App):
     def action_search(self):
         self.notify(
             "Search is not implemented yet."
-        )
-    # -------------------------------------------------
-    def action_save(self):
-        self.notify(
-            "Save is not implemented yet."
-        )
-    # -------------------------------------------------
-    def action_edit(self):
-        self.notify(
-            "Edit Mode (Phase 3)"
         )
     # -------------------------------------------------
     def action_run_all(self):

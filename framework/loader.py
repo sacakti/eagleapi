@@ -100,3 +100,59 @@ class RequestLoader:
             raise RequestValidationException(
                 f"Invalid JSON : {file}\n{ex}"
            ) from ex
+
+    def save(
+        self,
+        endpoint_name: str,
+        request_name: str,
+        request: RequestDefinition,
+    ):
+        file = (
+            self.get_request_directory(endpoint_name)
+            / f"{request_name}.json"
+        )
+
+        with file.open(
+            "w",
+            encoding="utf-8"
+        ) as stream:
+            stream.write(
+                request.model_dump_json(
+                    indent=4,
+                    by_alias=True
+                )
+            )
+
+    def create(
+        self,
+        endpoint_name: str,
+        request: RequestDefinition,
+    ):
+        directory = self.get_request_directory(
+            endpoint_name
+        )
+
+        directory.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
+        file = directory / f"{request.name}.json"
+
+        if file.exists():
+            raise FileExistsError(
+                f"Request already exists: {request.name}"
+            )
+
+        with file.open(
+            "w",
+            encoding="utf-8"
+        ) as stream:
+            stream.write(
+                request.model_dump_json(
+                    indent=4,
+                    by_alias=True
+                )
+            )
+
+        return file

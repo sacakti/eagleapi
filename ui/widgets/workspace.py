@@ -139,8 +139,13 @@ class Workspace(Vertical):
     def enable_edit(self):
         self._preview.read_only = False
         self._preview.focus()
+
     def disable_edit(self):
         self._preview.read_only = True
+
+    def is_editing(self):
+        return not self._preview.read_only
+    
     def preview_text(self):
         return self._preview.text
         
