@@ -100,11 +100,6 @@ class ApiTesterApp(App):
             "Help will be available in Phase 3."
         )
     # -------------------------------------------------
-    def action_search(self):
-        self.notify(
-            "Search is not implemented yet."
-        )
-    # -------------------------------------------------
     def action_run_all(self):
         self.notify(
             "Run All (Phase 3)"

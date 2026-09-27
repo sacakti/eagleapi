@@ -9,12 +9,15 @@ from textual.widgets import Button, Footer
 from textual.widgets import Header
 #from textual.widgets.option_list import OptionList
 from textual.widgets import OptionList
+from textual.widgets import Select
 
 from ui.widgets.endpoint_list import EndpointList
 from ui.widgets.request_list import RequestList
 from ui.widgets.workspace import Workspace
 from ui.widgets.status import StatusBar
 from ui.widgets.new_request import NewRequestScreen
+from ui.widgets.search import SearchScreen
+from ui.widgets.environment import EnvironmentScreen
 
 class MainScreen(Screen):
     # BINDINGS = [
@@ -51,6 +54,24 @@ class MainScreen(Screen):
     # -------------------------------------------------
     def compose(self):
         yield Header(show_clock=False)
+        with Horizontal(id="environment-bar"):
+            environments = self.controller.available_environments()
+
+            current_environment = (
+                self.environment
+                if self.environment in environments
+                else environments[0] if environments else None
+            )
+
+            yield Select(
+                [
+                    (environment, environment)
+                    for environment in environments
+                ],
+                value=current_environment,
+                id="environment-select",
+            )
+
         with Vertical():
             with Horizontal(id="main-layout"):
                 self.endpoint_list = EndpointList()
@@ -296,6 +317,39 @@ class MainScreen(Screen):
             self.workspace.execution(
                 f"Completed {len(results)} request(s)"
             )
+            
+        if event.button.id == "environment-button":
+
+            base_url = self.controller.environment_base_url()
+
+            def handle_environment(new_base_url):
+                if new_base_url is None:
+                    return
+
+                try:
+                    self.controller.update_environment_base_url(
+                        new_base_url
+                    )
+
+                    self.notify(
+                        f"Base URL updated: {new_base_url}"
+                    )
+
+                except Exception as exc:
+                    self.notify(
+                        f"Environment update failed: {exc}",
+                        severity="error",
+                    )
+
+            self.app.push_screen(
+                EnvironmentScreen(
+                    environment_name=self.environment,
+                    base_url=base_url,
+                ),
+                handle_environment,
+            )
+
+            return
     
     def action_edit(self):
         self.workspace.enable_edit()
@@ -385,3 +439,12 @@ class MainScreen(Screen):
             NewRequestScreen(),
             handle_new_request,
         )
+
+    def action_search(self):
+        def handle_search(value):
+            if value is None:
+                return
+    
+            self.workspace.search_text(value)
+    
+        self.app.push_screen(SearchScreen(), handle_search)

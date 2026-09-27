@@ -189,3 +189,38 @@ class Workspace(Vertical):
         self._report.clear()
         
         self._report.show_report(result)
+
+    # Search
+    def search_text(self, text: str):
+        content = self._preview.text
+
+        index = content.lower().find(text.lower())
+
+        if index == -1:
+            self.app.notify(
+                f"'{text}' not found.",
+                severity="warning",
+            )
+            return
+
+        # Convert character offsets to Textual (row, column)
+        start_text = content[:index]
+        end_index = index + len(text)
+        end_text = content[:end_index]
+
+        start_row = start_text.count("\n")
+        start_column = index - (
+            start_text.rfind("\n") + 1
+        )
+
+        end_row = end_text.count("\n")
+        end_column = end_index - (
+            end_text.rfind("\n") + 1
+        )
+
+        self._preview.focus()
+
+        self._preview.selection = (
+            (start_row, start_column),
+            (end_row, end_column),
+        )

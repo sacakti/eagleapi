@@ -15,6 +15,7 @@ class Configuration:
         self._config_directory = root_directory / Directory.CONFIG
         self._framework_configuration = {}
         self._environment_configuration = {}
+        self._environment_name = None
         
     @property
     def framework(self) -> Dict[str, Any]:
@@ -26,9 +27,20 @@ class Configuration:
     
     def load(self, environment_name: str) -> None:
         framework_file = self._config_directory / "config.json"
-        environment_file = self._config_directory / f"{environment_name}.json"
-        self._framework_configuration = self._load_json(framework_file)
-        self._environment_configuration = self._load_json(environment_file)
+        environment_file = (
+            self._config_directory
+            / f"{environment_name}.json"
+        )
+
+        self._framework_configuration = self._load_json(
+            framework_file
+        )
+
+        self._environment_configuration = self._load_json(
+            environment_file
+        )
+
+        self._environment_name = environment_name
     
     def get(self, key: str, default=None):
         if key in self._environment_configuration:
@@ -51,3 +63,35 @@ class Configuration:
             raise ConfigurationException(
                 f"Invalid JSON : {file}\n{ex}"
             ) from ex
+
+    def save_environment(self) -> None:
+        if not self._environment_name:
+            raise ConfigurationException(
+                "No environment loaded."
+            )
+
+        environment_file = (
+            self._config_directory
+            / f"{self._environment_name}.json"
+        )
+
+        with environment_file.open(
+            "w",
+            encoding="utf-8"
+        ) as stream:
+            json.dump(
+                self._environment_configuration,
+                stream,
+                indent=4
+            )
+
+    def available_environments(self):
+        files = sorted(
+            self._config_directory.glob("*.json")
+        )
+
+        return [
+            file.stem
+            for file in files
+            if file.name != "config.json"
+        ]

@@ -21,6 +21,23 @@ Header {
 Header.-tall {
     height: 1;
 }
+
+/* =====================================================
+   Environment
+===================================================== */
+#environment-bar {
+    height: 3;
+    width: 100%;
+    align: right middle;
+    padding: 0 1;
+    background: #0f172a;
+}
+
+#environment-select {
+    width: 25;
+    height: 3;
+}
+
 /* =====================================================
    Main Layout
 ===================================================== */

@@ -18,14 +18,17 @@ from framework.loader import RequestLoader
 from framework.runner import Runner
 from framework.scanner import EndpointScanner
 from framework.models import RequestDefinition
+from framework.configuration import Configuration
 
 class UIController:
     def __init__(self, context):
         self._context = context
         self._root = Path.cwd()
-        self._scanner = EndpointScanner(
-            self._root
-        )
+
+        self._configuration = Configuration(self._root)
+
+        self._scanner = EndpointScanner(self._root)
+
         self._loader = RequestLoader(
             self._root
         )
@@ -209,7 +212,22 @@ class UIController:
         )
 
         return request
-    
+
+    def load_environment(self, environment_name: str):
+        self._configuration.load(environment_name)
+
+
+    def environment_base_url(self) -> str:
+        return self._configuration.get("base_url", "")
+
+
+    def update_environment_base_url(self, base_url: str):
+        self._configuration.environment["base_url"] = base_url
+        self._configuration.save_environment()
+
+    def available_environments(self):
+        return self._configuration.available_environments()
+
     # -------------------------------------------------
     # Properties
     # -------------------------------------------------
@@ -219,3 +237,4 @@ class UIController:
     @property
     def request(self):
         return self._selected_request
+        
